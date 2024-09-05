@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #20b448;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>BMI Calculator</h1>
+        <div class="form-group">
+            <label for="weight">Weight (kg):</label>
+            <input type="number" id="weight" placeholder="Enter your weight">
+        </div>
+        <div class="form-group">
+            <label for="height">Height (cm):</label>
+            <input type="number" id="height" placeholder="Enter your height">
+        </div>
+        <button onclick="calculateBMI()">Calculate BMI</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function calculateBMI() {
+            // Get user inputs
+            const weight = parseFloat(document.getElementById('weight').value);
+            const heightCm = parseFloat(document.getElementById('height').value);
+            
+            if (isNaN(weight) || isNaN(heightCm) || weight <= 0 || heightCm <= 0) {
+                document.getElementById('result').innerHTML = 'Please enter valid weight and height.';
+                return;
+            }
+            
+            // Convert height from cm to meters
+            const heightM = heightCm / 100;
+
+            // Calculate BMI
+            const bmi = weight / (heightM * heightM);
+            let category = '';
+            
+            // Determine BMI category
+            if (bmi < 18.5) {
+                category = 'Underweight';
+            } else if (bmi < 24.9) {
+                category = 'Normal weight';
+            } else if (bmi < 29.9) {
+                category = 'Overweight';
+            } else {
+                category = 'Obesity';
+            }
+            
+            // Display result
+            document.getElementById('result').innerHTML = `
+                Your BMI is ${bmi.toFixed(2)} (${category}).<br>
+                ${getSuggestions(category)}
+            `;
+        }
+        
+        function getSuggestions(category) {
+            switch(category) {
+                case 'Underweight':
+                    return 'You may need to gain weight. Consider consulting a healthcare provider for advice on a balanced diet and nutrition.';
+                case 'Normal weight':
+                    return 'Your weight is within the normal range. Maintain a balanced diet and regular exercise to stay healthy.';
+                case 'Overweight':
+                    return 'You may need to lose weight. Consider adopting a healthier diet and increasing physical activity. Consulting a healthcare provider for personalized advice could be beneficial.';
+                case 'Obesity':
+                    return 'It is important to address obesity for better health. Consult a healthcare provider for a comprehensive plan that may include dietary changes, increased physical activity, and other lifestyle adjustments.';
+                default:
+                    return '';
+            }
+        }
+    </script>
+</body>
+</html>
